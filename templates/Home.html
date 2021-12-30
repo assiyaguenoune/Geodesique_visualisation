@@ -1,1 +1,76 @@
-<h1>Heelo in our App</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <title>Home</title>
+</head>
+<style>
+  /* Add a dark background color to the footer */
+  footer {
+
+    background-color: #2d2d30;
+    color: #f5f5f5;
+    padding: 25px;
+
+  }
+  
+  footer a {
+    color: #f5f5f5;
+  }
+  
+  footer a:hover {
+    color: #777;
+    text-decoration: none;
+  }
+  article{
+    height: 560px;
+    position: relative;
+  }
+  .btn-group{
+    position: absolute;
+    top: 50%;
+    left: 40%;
+
+  }
+  </style>
+<body>
+  <nav class="navbar navbar-inverse ">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#"><em>Geodesy</em></a>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a href="#">Acceuil</a></li>
+        <li><a href="#">A propos</a></li>
+        <li><a href="Contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+  <article>
+  <div class="btn-group btn-group-lg">
+    <button type="button" class="btn btn-warning"><a href="Direct">Probléme Directe</a></button>
+    <button type="button" class="btn btn-warning"><a href="Inverse">Probléme Inverse</a></button>
+  </div>
+  <ul class="pager">
+    <li class="next"><a href="N">Next</a></li>
+  </ul>
+ </article>
+  <footer class="text-center">
+    <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
+      <span class="glyphicon glyphicon-chevron-up"></span>
+    </a><br><br>
+    <p>Geodesy App <a href="https://www.w3schools.com" data-toggle="tooltip" title="Visit w3schools">Group 3 1CI TOPO</a></p>
+  </footer>
+  <script>
+  $(document).ready(function(){
+    // Initialize Tooltip
+    $('[data-toggle="tooltip"]').tooltip();
+  })
+  </script>
+</body>
+</html>
