@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Direct</title>
+</head>
+<body>
+  <form action="" method="post">
+    {% csrf_token %}
+    <h4>Choississez un ellipoide de référence :</h4>
+    <div>
+      {{directform.ellipsoid}}
+    </div>
+    <h4> Grand axe (en m)</h4>
+    <div>
+      {{directform.grand}}
+    </div>
+    <h4> Petit axe (en m)</h4>
+    <div>
+      {{directform.petit}}
+    </div>
+    <h4>Coordonnées du point de départ</h4>
+    <h4>Latitude :</h4> <div>{{directform.latitude}}</div>
+    <h4>Longitude :</h4> <div>{{directform.longitude}}</div>
+    <h4>Azimut du départ :</h4> <div>{{directform.azimut}}</div>
+    <h4>La distance géodésique :</h4> <div>{{directform.distance_geodesique}}</div>
+    <button type="submit" name="action" value="Calculer" class="btn btn-primary">Calculer </button>
+    <button type="submit" name="action =" value="Visualiser" class="btn btn-primary">Visualiser </button>
+  </form>
+  <div>
+    <h2>Les coordonnées du point d'arrivé :</h2>
+    <h4>Latitude :</h4>
+    <div>{{latitude2}}</div>
+    <h4>Longitude :</h4>
+    <div>{{longitude2}}</div>
+    <h4>Azimut inverse :</h4>
+    <div>{{alpha2}}</div>
+  </div>
+
+  <script type="text/javascript">
+    $(document).on('click', '#previous', function() {
+        {
+           window.history.go(-1);
+        }});   
+</script>
+</body>
+</html>
+{% endblock content %}
