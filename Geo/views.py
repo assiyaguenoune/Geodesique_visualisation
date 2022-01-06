@@ -36,13 +36,29 @@ def direct(request):
                     s=form.cleaned_data.get("distance_geodesique")
                     phif,lamf,alphaf=Direct(latitude,longitude,azimut,s,a,b)
                     if lamf<0:
-                         lam2=str(round(-lamf))+"° O"
+                         n=int(-lamf)
+                         m0=(lamf-n)*60
+                         m=int(m0)
+                         p=int((m0-m)*60)
+                         lam2=str(n)+"° "+str(m)+"' "+str(p)+"'' "+" O"
                     else:
-                         lam2=str(round(lamf))+"° E"
+                         n=int(lamf)
+                         m0=(lamf-n)*60
+                         m=int(m0)
+                         p=int((m0-m)*60)
+                         lam2=str(n)+"° "+str(m)+"' "+str(p)+"'' "+" E"
                     if phif<0:
-                         phi2=str(round(-phif))+"° S"
+                         n=int(phif)
+                         m0=(phif-n)*60
+                         m=int(m0)
+                         p=int((m0-m)*60)
+                         phi2=str(n)+"° "+str(m)+"' "+str(p)+"'' "+" S"
                     else:
-                         phi2=str(round(phif))+"° N"
+                         n=int(phif)
+                         m0=(phif-n)*60
+                         m=int(m0)
+                         p=int((m0-m)*60)
+                         phi2=str(n)+"° "+str(m)+"' "+str(p)+"'' "+" N"
                     alpha2=str(round(alphaf))+"°"
                     return render(request, 'direct.html',{'directform':directform , 'latitude2': phi2, 'longitude2':lam2 , 'alpha2':alpha2})
      else:

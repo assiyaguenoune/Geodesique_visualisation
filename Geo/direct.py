@@ -1,7 +1,10 @@
 from math import *
 
 def Direct(lat1,long1,alpha1,s,a,b):
-  
+    if alpha1<0.0:
+        alpha1=alpha1+2*pi
+    if alpha1>2*pi:
+        alpha1=alpha1-2*pi
     #Ellipsoide paramétres
     f=(a-b)/a
     ep=sqrt((a**2-b**2)/b**2)
@@ -31,7 +34,7 @@ def Direct(lat1,long1,alpha1,s,a,b):
     
     sigma=(s/(b*A))+delta_sigma
     
-    while(abs(sigma-sigma_0)>0.00001):
+    while(abs(sigma-sigma_0)>0.01):
         sigma_0=sigma
         sigma_m=(2.0*sigma1+sigma_0)/2
         delta_sigma=B*sin(sigma_0)*(cos(2*sigma_m)+(B/4)*(cos(sigma_0)*(2*pow(cos(2*sigma_m),2)-1))
@@ -54,6 +57,8 @@ def Direct(lat1,long1,alpha1,s,a,b):
     lam2=long1+delta_lamda
         #azimut de alpha2
     alpha2=atan(sin(alphaE)/(cos(beta1)*cos(alpha1)*cos(sigma)-sin(beta1)*sin(sigma)))
+    
+    alpha2=alpha2+2*pi/2.0
     
     if alpha2<0.0:
         alpha2=alpha2+2*pi
