@@ -1,8 +1,10 @@
 from math import pi
 from django.shortcuts import render
 from .direct import Direct
-from .forms import directform
+from .forms import directform 
+from .forms import inverseform
 from math import *
+from .inverse import Inverse
 # Create your views here.
 def home(request):
      return render(request,'Home.html')
@@ -31,36 +33,59 @@ def direct(request):
                               a,b = 6378137,6356752.3141
                          elif ellipsoid == "clarke":
                               a,b =6378249.145,6356514.870
+                         elif ellipsoid=="helmert1906":
+                              a,b=6378200,6356818.169627891
+                         elif ellipsoid=="clarke1866":
+                              a,b=6378206.4,6356583.799998981
                     azimut=form.cleaned_data.get("azimut")
                     azimut=azimut*pi/180
                     s=form.cleaned_data.get("distance_geodesique")
                     phif,lamf,alphaf=Direct(latitude,longitude,azimut,s,a,b)
                     if lamf<0:
-                         n=int(-lamf)
-                         m0=(lamf-n)*60
-                         m=int(m0)
-                         p=int((m0-m)*60)
-                         lam2=str(n)+"° "+str(m)+"' "+str(p)+"'' "+" O"
+                        lam2=str(round(-lamf))+"° O"
                     else:
-                         n=int(lamf)
-                         m0=(lamf-n)*60
-                         m=int(m0)
-                         p=int((m0-m)*60)
-                         lam2=str(n)+"° "+str(m)+"' "+str(p)+"'' "+" E"
+                        lam2=str(round(lamf))+"° E"
                     if phif<0:
-                         n=int(phif)
-                         m0=(phif-n)*60
-                         m=int(m0)
-                         p=int((m0-m)*60)
-                         phi2=str(n)+"° "+str(m)+"' "+str(p)+"'' "+" S"
+                        phi2=str(round(-phif))+"° S"
                     else:
-                         n=int(phif)
-                         m0=(phif-n)*60
-                         m=int(m0)
-                         p=int((m0-m)*60)
-                         phi2=str(n)+"° "+str(m)+"' "+str(p)+"'' "+" N"
+                        phi2=str(round(phif))+"° N"
                     alpha2=str(round(alphaf))+"°"
                     return render(request, 'direct.html',{'directform':directform , 'latitude2': phi2, 'longitude2':lam2 , 'alpha2':alpha2})
      else:
         form = directform()
         return render(request, 'direct.html', {'directform': form})
+def visualisation(request):
+    return render(request,'visualisation.html')
+def inverse(request):
+    if request.method == 'POST':
+        form = inverseform(request.POST)
+        action = request.POST['action']
+        if action == "Calculer":
+            latitude, longitude, latitude0, longitude0 = 0, 0, 0, 0
+            if form.is_valid():
+                ellipsoid = form.cleaned_data.get("ellipsoid")
+                a = form.cleaned_data.get("grand")
+                b = form.cleaned_data.get("petit")
+                if a==0 or not a or b==0 or not b:
+                    if ellipsoid == "wgs":
+                        a,b = 6378137,6356752.3142
+                    elif ellipsoid == "grs":
+                        a,b = 6378137,6356752.3141
+                    elif ellipsoid == "clarke":
+                        a,b =  	6378249.145,6356514.870
+                    elif ellipsoid=="helmert1906":
+                        a,b=6378200,6356818.169627891
+                    elif ellipsoid=="clarke1866":
+                        a,b=6378206.4,6356583.799998981  
+                latitude= form.cleaned_data.get("latitude")
+                longitude= form.cleaned_data.get("longitude")
+                latitude0= form.cleaned_data.get("latitude0")
+                longitude0= form.cleaned_data.get("longitude0")
+                s, az1, az2=Inverse(a, b, latitude*pi/180, longitude*pi/180, latitude0*pi/180, longitude0*pi/180)
+                azdirect = str(az1)+"°"
+                azinverse = str(az2)+"°"
+                distance = str(abs(s))+"m"
+                return render(request, 'inverse.html', {'form': form, 'az1': azdirect, 'az2': azinverse, 'distance': distance})
+    else:
+        form = inverseform()
+        return render(request, 'inverse.html', {'form': form})

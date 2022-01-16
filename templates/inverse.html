@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+  <form action="" method="post">
+    {% csrf_token %}
+  <h3>choisir l'ellipsoide de référence :</h3>
+  <div >{{form.ellipsoid}}</div>
+  <div>
+  <h3>a et b</h3>
+  <div>{{form.petit}}</div> <br>
+  <div>{{form.grand}}</div></div>
+  <h3>Les coordonnées du point de départ :</h3>
+  <div>
+    <div>{{form.latitude}}</div> <br>
+    <div>{{form.longitude}}</div>
+  </div>
+  <h3>Les coordonnées du point d'arrivé:</h3>
+  <div>
+    <div>{{form.latitude0}}</div><br>
+    <div>{{form.longitude0}}</div>
+  </div> <br><br> 
+  <button type="submit" name="action" value="Calculer" class="btn btn-primary">Calculer </button>
+  <button type="submit" name="action =" value="Visualiser" class="btn btn-primary">Visualiser </button>
+</form>
+  <div>
+    <h4>L'azimut de départ :</h4>
+    <div>{{az1}}</div>
+    <h4>L'azimut inverse :</h4>
+    <div>{{az2}}</div>
+    <h4> La distance (en m) :</h4>
+    <div>{{distance}}</div>
+  </div>
+
+  <script type="text/javascript">
+    $(document).on('click', '#previous', function() {
+        {
+           window.history.go(-1);
+        }});   
+</script>
+</body>
+</html>

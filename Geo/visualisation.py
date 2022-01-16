@@ -1,4 +1,6 @@
 from math import *
+import matplotlib.pyplot as plt
+import numpy as np
 
 def transformation(a,e, latitude, longitude,h):
   phi=latitude
@@ -9,7 +11,10 @@ def transformation(a,e, latitude, longitude,h):
   r=(n+h)*cos(phi)
   x=r*cos(lamda)
   z=(n*(1-e2)+h)*sinphi
-  return x,y,z
+  return x,z
   
-  
+def points(phi1,lamda1,a,b,s):
+  n=500
+  #pas
+  s=s/(n-1)
   

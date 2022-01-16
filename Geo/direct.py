@@ -1,78 +1,79 @@
 from math import *
 
-def Direct(lat1,long1,alpha1,s,a,b):
-    if alpha1<0.0:
-        alpha1=alpha1+2*pi
-    if alpha1>2*pi:
-        alpha1=alpha1-2*pi
-    #Ellipsoide paramétres
-    f=(a-b)/a
-    ep=sqrt((a**2-b**2)/b**2)
-    #B1 au point P1
-    TanB1=(1-f)*tan(lat1)
-    beta1=atan(TanB1)
-    #B0 au vertex H0
-    CosB0=cos(beta1)*sin(alpha1)
-    beta0=acos(CosB0)
-    #la constante w
-    w2=(ep*sin(beta0))**2
-    #distance angulaire au P1
-    sigma1=atan(TanB1/cos(alpha1))
-    #azimut de la geodésique à l'équateur
-    SinalphaE=cos(beta0)
-    alphaE=asin(SinalphaE)
-    #constantes de Vincenty A B
-    A=1.0+(w2/16384)*(4096+w2*(-768+w2*(320-175*w2)))
-    B=(w2/1024)*(256+w2*(-128+w2*(74-47*w2)))
-    #distance angulaire sur le grand cercle de la sphére auxilaire
-    sigma_0=s/b*A
-    
-    sigma_m=(2.0*sigma1+sigma_0)/2
-    
-    delta_sigma=B*sin(sigma_0)*(cos(2*sigma_m)+(B/4)*(cos(sigma_0)*(2*pow(cos(2*sigma_m),2)-1))
-                -(B/6*cos(2*sigma_m))*(-3+4*pow(sin(sigma_0),2))*(-3+4**pow(cos(2*sigma_m),2)))
-    
-    sigma=(s/(b*A))+delta_sigma
-    
-    while(abs(sigma-sigma_0)>0.01):
-        sigma_0=sigma
-        sigma_m=(2.0*sigma1+sigma_0)/2
-        delta_sigma=B*sin(sigma_0)*(cos(2*sigma_m)+(B/4)*(cos(sigma_0)*(2*pow(cos(2*sigma_m),2)-1))
-                -(B/6*cos(2*sigma_m))*(-3+4*pow(sin(sigma_0),2))*(-3+4**pow(cos(2*sigma_m),2)))
-    
-        sigma=(s/(b*A))+delta_sigma
-        #latitude reduite B2
-    tanbeta2=(sin(beta1)*cos(sigma)+cos(beta1)*sin(sigma)*cos(alpha1))/sqrt(sin(alphaE)**2+((sin(beta1)*sin(sigma)-cos(beta1)*cos(sigma)*cos(alpha1)))**2)
-        #tan(phi2)
-    tanphi2=tanbeta2/(1-f) 
-        #calcul de phi2
-    phi2=atan(tanphi2)
-        #calcul de la difference de longitude sur la sphére auxiliaire
-    delta_u=sin(sigma)*sin(alpha1)/(cos(beta1)*cos(sigma)-sin(beta1)*sin(sigma)*cos(alpha1))
-        #la constante C de vincenty
-    C=(f/16)*cos(alphaE)**2*(4+f*(4-3*cos(alphaE)**2))
-        #differnce de longitude deltalamda
-    delta_lamda=delta_u-(1-C)*f*sin(alphaE)*(sigma+C*sin(sigma)*(cos(2*sigma_m)+C*cos(sigma)*(-1+2*cos(2*sigma_m)**2)))
-       #lamda final
-    lam2=long1+delta_lamda
-        #azimut de alpha2
-    alpha2=atan(sin(alphaE)/(cos(beta1)*cos(alpha1)*cos(sigma)-sin(beta1)*sin(sigma)))
-    
-    alpha2=alpha2+2*pi/2.0
-    
-    if alpha2<0.0:
-        alpha2=alpha2+2*pi
-    if alpha2>2*pi :
-        alpha2=alpha2-2*pi
-    phi2=phi2*180/pi
-    lam2=lam2*180/pi
-    alpha2=alpha2*180/pi
-    if lam2>180:
-        lam2=lam2-360
-    if lam2<-180:
-        lam2=lam2+360
-    return phi2,lam2,alpha2
-  
+def Direct(latitude1,longitude1,alpha1To2,s,a,b) :
+        f = (a-b)/a
+        if abs(latitude1)==90:
+                U1=latitude1
+        else:		
+               TanU1 = (1-f) * tan(latitude1)
+               U1 = atan(TanU1)
+        sigma1 = atan2( TanU1, cos(alpha1To2) )
+        Sinalpha = cos(U1) * sin(alpha1To2)
+        cosalpha_sq = 1.0 - Sinalpha * Sinalpha
+
+        u2 = cosalpha_sq * (a * a - b * b ) / (b * b)
+        A = 1.0 + (u2 / 16384) * (4096 + u2 * (-768 + u2 * \
+                (320 - 175 * u2) ) )
+        B = (u2 / 1024) * (256 + u2 * (-128 + u2 * (74 - 47 * u2) ) )
+
+        # Starting with the approximation
+        sigma = (s / (b * A))
+
+        last_sigma = 2.0 * sigma + 2.0
+        two_sigma_m = (2 * sigma1 + sigma)/2
+        # Iterate the following three equations 
+        #  until there is no significant change in sigma 
+        delsig = B*sin(sigma)*(cos(2*two_sigma_m)+0.25*B*(cos(sigma)*(2*cos(2*two_sigma_m)**2-1)-B/6*cos(2*two_sigma_m)*(-3+4*sin(sigma)**2)*(-3+4*cos(2*two_sigma_m)**2)))
+        # two_sigma_m , delta_sigma
+        count = 0
+        while ( abs( two_sigma_m) > 0.01 and count<200) :
+                two_sigma_m = 2 * sigma1 + sigma
+
+                delta_sigma = B * sin(sigma) * ( cos(two_sigma_m) 
+                        + (B/4) * (cos(sigma) * 
+                        (-1 + 2 * pow( cos(two_sigma_m), 2 ) -  
+                        (B/6) * cos(two_sigma_m) * \
+                        (-3 + 4 * pow(sin(sigma), 2 )) *  \
+                        (-3 + 4 * pow( cos (two_sigma_m), 2 ))))) 
+                
+                last_sigma = sigma
+                sigma = (s / (b * A)) + delta_sigma
+                count = count+1
+
+        latitude2 = atan2 ( (sin(U1) * cos(sigma) + cos(U1) * sin(sigma) * cos(alpha1To2) ), \
+                ((1-f) * sqrt( pow(Sinalpha, 2) +  \
+                pow(sin(U1) * sin(sigma) - cos(U1) * cos(sigma) * cos(alpha1To2), 2))))
+
+        lembda = atan2( (sin(sigma) * sin(alpha1To2 )), (cos(U1) * cos(sigma) -  \
+                sin(U1) *  sin(sigma) * cos(alpha1To2)))
+
+        C = (f/16) * cosalpha_sq * (4 + f * (4 - 3 * cosalpha_sq ))
+
+        omega = lembda - (1-C) * f * Sinalpha *  \
+                (sigma + C * sin(sigma) * (cos(two_sigma_m) + \
+                C * cos(sigma) * (-1 + 2 * pow(cos(two_sigma_m),2) )))
+
+        longitude2 = longitude1 + omega
+
+        alpha21 = atan2 ( Sinalpha, (-sin(U1) * sin(sigma) +  \
+                cos(U1) * cos(sigma) * cos(alpha1To2)))
+
+        alpha21 = alpha21 + 2*pi / 2.0
+        if ( alpha21 < 0.0 ) :
+                alpha21 = alpha21 + 2*pi
+        if ( alpha21 > 2*pi ) :
+                alpha21 = alpha21 - 2*pi
+
+        latitude2 = latitude2*180/pi
+        longitude2= longitude2*180/pi
+        alpha21   = alpha21*180/pi
+        if longitude2>180:
+                longitude2 =longitude2-360
+        if longitude2<-180:
+                longitude2 = longitude2+360
+        return latitude2,longitude2, alpha21 
+
+
     
         
     
