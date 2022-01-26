@@ -1,27 +1,37 @@
 from math import *
 
-def Direct(latitude1,longitude1,alpha1To2,s,a,b) :
+def Direct(lat1,long1,alpha_direct,s,a,b) :
+        
+        # calcul de l'aplatissement 'f' :
         f = (a-b)/a
-        if abs(latitude1)==90:
-                U1=latitude1
+        
+        # calcul de la latitude réduite 'beta1' :  
+        if abs(lat1)==90:
+                beta1=lat1
         else:		
-               TanU1 = (1-f) * tan(latitude1)
-               U1 = atan(TanU1)
-        sigma1 = atan2( TanU1, cos(alpha1To2) )
-        Sinalpha = cos(U1) * sin(alpha1To2)
-        cosalpha_sq = 1.0 - Sinalpha * Sinalpha
+               Tanbeta1 = (1-f) * tan(lat1)
+               beta1 = atan(Tanbeta1)
+               
+        # calcul de la latitude réduite 'beta0' du vertex :  
+        cosBeta0 = cos(beta1) * sin(alpha_direct)
+        sinBeta0 = 1.0 - cosBeta0 * cosBeta0
+        
+        # calcul de la constante 'w_carré' :
+        w_carré = sinBeta0 * (a * a - b * b ) / (b * b)
+        
+        # calcul de la distance angulaire 'sigma1' sur la dphère auxiliaire : 
+        sigma1 = atan2( Tanbeta1, cos(alpha_direct) )
+        
+        # calcul des constantes de Vincenty A et B :        
+        A = 1.0 + (w_carré / 16384) * (4096 + w_carré * (-768 + w_carré * \
+                (320 - 175 * w_carré) ) )
+        B = (w_carré / 1024) * (256 + w_carré * (-128 + w_carré * (74 - 47 * w_carré) ) )
 
-        u2 = cosalpha_sq * (a * a - b * b ) / (b * b)
-        A = 1.0 + (u2 / 16384) * (4096 + u2 * (-768 + u2 * \
-                (320 - 175 * u2) ) )
-        B = (u2 / 1024) * (256 + u2 * (-128 + u2 * (74 - 47 * u2) ) )
-
-        # Starting with the approximation
+        # start avec approximation :
         sigma = (s / (b * A))
-
         last_sigma = 2.0 * sigma + 2.0
         two_sigma_m = (2 * sigma1 + sigma)/2
-        # Iterate the following three equations 
+        
         #  until there is no significant change in sigma 
         delsig = B*sin(sigma)*(cos(2*two_sigma_m)+0.25*B*(cos(sigma)*(2*cos(2*two_sigma_m)**2-1)-B/6*cos(2*two_sigma_m)*(-3+4*sin(sigma)**2)*(-3+4*cos(2*two_sigma_m)**2)))
         # two_sigma_m , delta_sigma
@@ -39,39 +49,47 @@ def Direct(latitude1,longitude1,alpha1To2,s,a,b) :
                 last_sigma = sigma
                 sigma = (s / (b * A)) + delta_sigma
                 count = count+1
+        
+        # calcul de latitude_2 'lat2' :
+        lat2 = atan2 ( (sin(beta1) * cos(sigma) + cos(beta1) * sin(sigma) * cos(alpha_direct) ), \
+                ((1-f) * sqrt( pow(cosBeta0, 2) +  \
+                pow(sin(beta1) * sin(sigma) - cos(beta1) * cos(sigma) * cos(alpha_direct), 2))))
 
-        latitude2 = atan2 ( (sin(U1) * cos(sigma) + cos(U1) * sin(sigma) * cos(alpha1To2) ), \
-                ((1-f) * sqrt( pow(Sinalpha, 2) +  \
-                pow(sin(U1) * sin(sigma) - cos(U1) * cos(sigma) * cos(alpha1To2), 2))))
+        lembda = atan2( (sin(sigma) * sin(alpha_direct )), (cos(beta1) * cos(sigma) -  \
+                sin(beta1) *  sin(sigma) * cos(alpha_direct)))
 
-        lembda = atan2( (sin(sigma) * sin(alpha1To2 )), (cos(U1) * cos(sigma) -  \
-                sin(U1) *  sin(sigma) * cos(alpha1To2)))
+        C = (f/16) * sinBeta0 * (4 + f * (4 - 3 * sinBeta0 ))
 
-        C = (f/16) * cosalpha_sq * (4 + f * (4 - 3 * cosalpha_sq ))
-
-        omega = lembda - (1-C) * f * Sinalpha *  \
+        omega = lembda - (1-C) * f * cosBeta0 *  \
                 (sigma + C * sin(sigma) * (cos(two_sigma_m) + \
                 C * cos(sigma) * (-1 + 2 * pow(cos(two_sigma_m),2) )))
-
-        longitude2 = longitude1 + omega
-
-        alpha21 = atan2 ( Sinalpha, (-sin(U1) * sin(sigma) +  \
-                cos(U1) * cos(sigma) * cos(alpha1To2)))
-
-        alpha21 = alpha21 + 2*pi / 2.0
-        if ( alpha21 < 0.0 ) :
-                alpha21 = alpha21 + 2*pi
-        if ( alpha21 > 2*pi ) :
-                alpha21 = alpha21 - 2*pi
-
-        latitude2 = latitude2*180/pi
-        longitude2= longitude2*180/pi
-        alpha21   = alpha21*180/pi
-        if longitude2>180:
-                longitude2 =longitude2-360
-        if longitude2<-180:
-                longitude2 = longitude2+360
-        return latitude2,longitude2, alpha21 
+        
+        # calcul de longitude_2 'long2' :
+        long2 = long1 + omega
+        
+        # calcul de azimut inverse 'alpha_inverse' :
+        alpha_inverse = atan2 ( cosBeta0, (-sin(beta1) * sin(sigma) +  \
+                cos(beta1) * cos(sigma) * cos(alpha_direct)))
+        alpha_inverse = alpha_inverse + 2*pi / 2.0
+        
+        # etude des conditions de azimut inverse :
+        if ( alpha_inverse < 0.0 ) :
+                alpha_inverse = alpha_inverse + 2*pi
+        if ( alpha_inverse > 2*pi ) :
+                alpha_inverse = alpha_inverse - 2*pi
+        
+        # convertion de radian vers degrée :
+        lat2 = lat2*180/pi
+        long2= long2*180/pi
+        alpha_inverse   = alpha_inverse*180/pi
+        
+        # etude des conditions de longitude_2 :
+        if long2>180:
+                long2 =long2-360
+        if long2<-180:
+                long2 = long2+360
+                
+        return lat2,long2, alpha_inverse 
 
 
     
