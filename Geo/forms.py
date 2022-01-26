@@ -3,7 +3,6 @@ from turtle import distance
 from xml.dom import ValidationErr
 from django import forms
 from django.core.validators import MaxValueValidator
-from django.forms import MultiWidget, NumberInput, ValidationError
 
 
 class LatitudeWidget(forms.MultiWidget):
@@ -109,9 +108,8 @@ class directform(forms.Form):
     petit = forms.FloatField(required=False, min_value=0, initial=0, widget=forms.NumberInput(attrs={'class':'ccst'}))
     latitude = LatitudeField()
     longitude = LongitudeField()
-    azimut = forms.FloatField(min_value=0, max_value=360, initial=0, widget=forms.NumberInput(attrs={'class':'ccst','style':'width:30px'}))
-    distance_geodesique = forms.FloatField(min_value=0, initial=0, widget=forms.NumberInput(attrs={'class':'ccst'}))
-          
+    azimut = forms.FloatField(min_value=0, initial=0, widget=forms.NumberInput(attrs={'class':'ccst','style':'width:30px'}))
+    distance_geodesique = forms.FloatField(min_value=0, initial=0, widget=forms.NumberInput(attrs={'class':'ccst'}))      
     
 class inverseform(forms.Form):
     ellipsoid = forms.ChoiceField(choices=[('wgs', 'WGS84'),('grs', 'GRS80'), ('clarke', 'Clarke1880'), ('helmert1906', 'Helmert1906') ,('clarke1866','Clarke1866'),('autre' , 'autre')], required=False, widget= forms.Select(attrs={'class':'selectdrop'}))
