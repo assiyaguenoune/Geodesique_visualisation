@@ -45,6 +45,13 @@
 </div>
 <ul class="pager">
 <li class="previous"><a href="">Previous</a></li>
+<br><br><br>
+<form action="" method="post">
+  {% csrf_token %}
+  <button type="submit" action='Sub' value="Sub" >Sub</button>
+</form>
+
+<div>{{ploty|safe}}</div>
 </ul>
 </body>
 </html>

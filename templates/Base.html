@@ -1,15 +1,23 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Geodésique</title>
+  {% block head %}
+  <link rel="stylesheet" href="{% static 'home.css' %}">
+  {% endblock %}
 </head>
-
-{% block content %}
 <body>
-  
+  {% block content %}
+  <!-- Content goes here -->
+
+  {% endblock %}
+
+  {% block tail %}
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  <script src="{% static 'home.js' %}"></script>
+  {% endblock %}
 </body>
-{% endblock content %}
 </html>

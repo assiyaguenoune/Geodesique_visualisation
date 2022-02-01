@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+{% extends 'Base.html' %}
+
+
+{% block head %}
+ {% endblock %}
+  {% block content %}
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -7,6 +12,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <title>Home</title>
 </head>
 <style>
@@ -37,11 +43,106 @@
     left: 40%;
 
   }
+  html , body{
+    height: 100px;
+    position: relative;
+    background-image: url("https://images.pexels.com/photos/1276429/pexels-photo-1276429.jpeg?cs=srgb&dl=pexels-dids-1276429.jpg&fm=jpg");
+  }
+  .wrap {
+    position: absolute;
+    height: 100%;
+    top: 110px;
+    left: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+  }
+ 
+  
+  .button {
+    min-width: 300px;
+    min-height: 60px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 1.3px;
+    font-weight: 700;
+    color: #313133;
+    background: #4FD1C5;
+  background: linear-gradient(90deg, rgba(129,230,217,1) 0%, rgba(79,209,197,1) 100%);
+    border: none;
+    border-radius: 1000px;
+    box-shadow: 12px 12px 24px rgba(79,209,197,.64);
+    transition: all 0.3s ease-in-out 0s;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+    padding: 10px;
+    }
+  
+  button::before {
+  content: '';
+    border-radius: 1000px;
+    min-width: calc(300px + 12px);
+    min-height: calc(60px + 12px);
+    border: 6px solid #00FFCB;
+    box-shadow: 0 0 60px rgba(0,255,203,.64);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: all .3s ease-in-out 0s;
+  }
+  
+  .button:hover, .button:focus {
+    color: #313133;
+    transform: translateY(-6px);
+  }
+  
+  button:hover::before, button:focus::before {
+    opacity: 1;
+  }
+  
+  button::after {
+    content: '';
+    width: 30px; height: 30px;
+    border-radius: 100%;
+    border: 6px solid #00FFCB;
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: ring 1.5s infinite;
+  }
+
+  
+  button:hover::after, button:focus::after {
+    animation: none;
+    display: none;
+  }
+  
+  @keyframes ring {
+    0% {
+      width: 30px;
+      height: 30px;
+      opacity: 1;
+    }
+    100% {
+      width: 300px;
+      height: 300px;
+      opacity: 0;
+    }
+  }
   </style>
+ 
 <body>
+ 
   <nav class="navbar navbar-inverse ">
     <div class="container-fluid">
-      <div class="navbar-header">
+      <div class="navbar-header" style="background-color: black;">
         <a class="navbar-brand" href="#"><em>Geodesy</em></a>
       </div>
       <ul class="nav navbar-nav navbar-right">
@@ -51,27 +152,144 @@
         <li><a href="visualiser">Visualisation</a></li>
       </ul>
     </div>
-  </nav>
+  </nav> 
   <article>
-  <div class="btn-group btn-group-lg">
-    <button type="button" class="btn btn-warning"><a href="Direct">Probléme Directe</a></button>
-    <button type="button" class="btn btn-warning"><a href="inverse">Probléme Inverse</a></button>
+  <!-- particles.js container --> 
+
+
+<!-- particles.js lib - https://github.com/VincentGarreau/particles.js --> 
+
+  <div class="wrap">
+    <button type="button" class="button"><a href="Direct" class="button">Probléme Directe</a></button>
+  
+    <button type="button" class="button td"><a href="inverse" class="button">Probléme Inverse</a></button>
   </div>
-  <ul class="pager">
-    <li class="next"><a href="N">Next</a></li>
-  </ul>
  </article>
-  <footer class="text-center">
+
+  <footer class="text-center"> <div id="particles-js" style="height:30px"></div>
     <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
       <span class="glyphicon glyphicon-chevron-up"></span>
     </a><br><br>
     <p>Geodesy App <a href="https://www.w3schools.com" data-toggle="tooltip" title="Visit w3schools">Group 3 1CI TOPO</a></p>
   </footer>
+  {% block javascript %}
   <script>
   $(document).ready(function(){
     // Initialize Tooltip
     $('[data-toggle="tooltip"]').tooltip();
-  })
+  });
+  particlesJS("particles-js", {
+    "particles": {
+      "number": {
+        "value": 355,
+        "density": {
+          "enable": true,
+          "value_area": 789.1476416322727
+        }
+      },
+      "color": {
+        "value": "#ffffff"
+      },
+      "shape": {
+        "type": "circle",
+        "stroke": {
+          "width": 0,
+          "color": "#000000"
+        },
+        "polygon": {
+          "nb_sides": 5
+        },
+        "image": {
+          "src": "img/github.svg",
+          "width": 100,
+          "height": 100
+        }
+      },
+      "opacity": {
+        "value": 0.48927153781200905,
+        "random": false,
+        "anim": {
+          "enable": true,
+          "speed": 0.2,
+          "opacity_min": 0,
+          "sync": false
+        }
+      },
+      "size": {
+        "value": 2,
+        "random": true,
+        "anim": {
+          "enable": true,
+          "speed": 2,
+          "size_min": 0,
+          "sync": false
+        }
+      },
+      "line_linked": {
+        "enable": false,
+        "distance": 150,
+        "color": "#ffffff",
+        "opacity": 0.4,
+        "width": 1
+      },
+      "move": {
+        "enable": true,
+        "speed": 0.2,
+        "direction": "none",
+        "random": true,
+        "straight": false,
+        "out_mode": "out",
+        "bounce": false,
+        "attract": {
+          "enable": false,
+          "rotateX": 600,
+          "rotateY": 1200
+        }
+      }
+    },
+    "interactivity": {
+      "detect_on": "canvas",
+      "events": {
+        "onhover": {
+          "enable": true,
+          "mode": "bubble"
+        },
+        "onclick": {
+          "enable": true,
+          "mode": "push"
+        },
+        "resize": true
+      },
+      "modes": {
+        "grab": {
+          "distance": 400,
+          "line_linked": {
+            "opacity": 1
+          }
+        },
+        "bubble": {
+          "distance": 83.91608391608392,
+          "size": 1,
+          "duration": 3,
+          "opacity": 1,
+          "speed": 3
+        },
+        "repulse": {
+          "distance": 200,
+          "duration": 0.4
+        },
+        "push": {
+          "particles_nb": 4
+        },
+        "remove": {
+          "particles_nb": 2
+        }
+      }
+    },
+    "retina_detect": true
+  });
   </script>
+  {% endblock javascript %}
 </body>
 </html>
+{%endblock%}

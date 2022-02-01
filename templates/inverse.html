@@ -14,6 +14,29 @@
   <title>Document</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
+<style>
+  .ccst{
+    width: 200px;
+    height: 30px;
+    border-radius: 5px;
+    background-color:rgb(37, 100, 119) ;
+    color: blanchedalmond;
+    text-align: center;
+  }
+  .ccst2{
+    width: 60px;
+    height: 30px;
+    border-radius: 5px;
+    background-color:rgb(37, 100, 119) ;
+    color: blanchedalmond;
+    text-align: center;
+  }
+  .ccst1{
+    background-color: burlywood;
+    height: 30px;
+    border-radius: 5px;
+  }
+</style>
 <body>
   {% if not plot %}
   <form action="" method="post">
@@ -34,9 +57,26 @@
     <div>{{form.latitude0}}</div><br>
     <div>{{form.longitude0}}</div>
   </div> <br><br> 
-  <button type="submit" name="action" value="Calculer" class="btn btn-primary">Calculer </button>
-  <button type="submit" name="action" value="Visualiser" class="btn btn-primary">Visualiser </button>
+  <button type="submit" name="action" value="Calculer" class="glow-on-hover" id="btn">Calculer </button>
+    <button type="submit" name="action" value="Visualiser" class="glow-on-hover">Visualiser </button>
 </form>
+<article>
+  <figure>
+      <!-- <video src="https://cdn-icons-mp4.flaticon.com/512/6416/6416399.mp4"></video> -->
+      <!-- <img src="http://www.myspace.com/earthharmonics/giphy.gif" alt=""> -->
+      <iframe src="https://giphy.com/embed/WlBUAWG03Zic8"  class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/earth-WlBUAWG03Zic8"></a></p>
+  </figure>
+
+  <div>
+    <h4>Problème Inverse</h4>
+      <p>
+        Étant donné deux coordonnées géographiques, utilisez  <strong>la formule inverse de Vincenty </strong>  pour calculer une distance géodesique et l'azimut géodésique direct et inverse entre les deux points.
+      </p>
+      <h1>
+          Geohub
+      </h1>
+  </div>
+</article>
   <div>
     <h4>L'azimut de départ :</h4>
     <div>{{az1}}</div>
@@ -58,7 +98,35 @@
     $(document).on('click', '#previous', function() {
         {
            window.history.go(-1);
-        }});   
+        }}); 
+        const article = document.querySelector('article');
+
+        // to compute the center of the card retrieve its coordinates and dimensions
+        const {
+          x, y, width, height,
+        } = article.getBoundingClientRect();
+        const cx = x + width / 2;
+        const cy = y + height / 2;
+        
+        // following the mousemove event compute the distance betwen the cursor and the center of the card
+        function handleMove(e) {
+          const { pageX, pageY } = e;
+        
+          // ! consider the relative distance in the [-1, 1] range
+          const dx = (cx - pageX) / (width / 2);
+          const dy = (cy - pageY) / (height / 2);
+        
+          // rotate the card around the x axis, according to the vertical distance, and around the y acis, according to the horizontal gap 
+          this.style.transform = `rotateX(${10 * dy * -1}deg) rotateY(${10 * dx}deg)`;
+        }
+        
+        // following the mouseout event reset the transform property
+        function handleOut() {
+          this.style.transform = 'initial';
+        }
+        
+        article.addEventListener('mousemove', handleMove);
+        article.addEventListener('mouseout', handleOut);  
 </script>
 {% endblock javascript %}
 </body>

@@ -8,12 +8,12 @@ from django.core.validators import MaxValueValidator
 class LatitudeWidget(forms.MultiWidget):
     def __init__(self, attrs=None):
         super().__init__([
-            forms.NumberInput( attrs={'max':90, 'min':0, 'class': 'numinp'}),
-            forms.NumberInput(attrs={'max':59, 'min':0, 'class': 'numinp'}),
-            forms.NumberInput(attrs={'max':59, 'min':0, 'class': 'numinp'}),
+            forms.NumberInput( attrs={'max':90, 'min':0, 'class': 'numinp ccst2'}),
+            forms.NumberInput(attrs={'max':59, 'min':0, 'class': 'numinp ccst2'}),
+            forms.NumberInput(attrs={'max':59, 'min':0, 'class': 'numinp ccst2'}),
             forms.Select(choices=(
             ('north', 'N'),
-            ('south', 'S')), attrs={'class':'selectdrop'})]) 
+            ('south', 'S')), attrs={'class':'selectdrop ccst1'})]) 
     
     def decompress(self, value):
         if value:
@@ -44,12 +44,12 @@ class LatitudeField(forms.MultiValueField):
 class LongitudeWidget(forms.MultiWidget):
     def __init__(self, attrs=None):
         super().__init__([
-            forms.NumberInput(attrs={'max':180, 'min':0, 'class': 'numinp'}),
-            forms.NumberInput(attrs={'max':59, 'min':0, 'class': 'numinp'}),
-            forms.NumberInput(attrs={'max':59, 'min':0, 'class': 'numinp'}),
+            forms.NumberInput(attrs={'max':180, 'min':0, 'class': 'numinp ccst2'}),
+            forms.NumberInput(attrs={'max':59, 'min':0, 'class': 'numinp ccst2'}),
+            forms.NumberInput(attrs={'max':59, 'min':0, 'class': 'numinp ccst2'}),
             forms.Select(choices=(
             ('est', 'E'),
-            ('west', 'O')), attrs={'class':'selectdrop'})])
+            ('west', 'O')), attrs={'class':'selectdrop ccst1'})])
         
     
     def decompress(self, value):
@@ -103,16 +103,16 @@ class parametersField(forms.MultiValueField):
             return data_list
         return [None, None]
 class directform(forms.Form):
-    ellipsoid = forms.ChoiceField(choices=[('wgs', 'WGS84'),('grs', 'GRS80'), ('clarke', 'Clarke1880'), ('helmert1906', 'Helmert1906') ,('clarke1866','Clarke1866'),('autre' , 'autre')], required=False, widget= forms.Select(attrs={'class':'selectdrop' }))
+    ellipsoid = forms.ChoiceField(choices=[('wgs', 'WGS84'),('grs', 'GRS80'), ('clarke', 'Clarke1880'), ('helmert1906', 'Helmert1906') ,('clarke1866','Clarke1866'),('autre' , 'autre')], required=False, widget= forms.Select(attrs={'class':'selectdrop ccst' }))
     grand =  forms.FloatField(required=False, min_value=0, initial=0, widget=forms.NumberInput(attrs={'class':'ccst'}))
     petit = forms.FloatField(required=False, min_value=0, initial=0, widget=forms.NumberInput(attrs={'class':'ccst'}))
     latitude = LatitudeField()
     longitude = LongitudeField()
-    azimut = forms.FloatField(min_value=0, max_value=360 , initial=0, widget=forms.NumberInput(attrs={'class':'ccst','style':'width:30px'}))
+    azimut = forms.FloatField(min_value=0, max_value=360 , initial=0, widget=forms.NumberInput(attrs={'class':'ccst','style':'width:100px''height:100px'}))
     distance_geodesique = forms.FloatField(min_value=0, initial=0, widget=forms.NumberInput(attrs={'class':'ccst'}))      
     
 class inverseform(forms.Form):
-    ellipsoid = forms.ChoiceField(choices=[('wgs', 'WGS84'),('grs', 'GRS80'), ('clarke', 'Clarke1880'), ('helmert1906', 'Helmert1906') ,('clarke1866','Clarke1866'),('autre' , 'autre')], required=False, widget= forms.Select(attrs={'class':'selectdrop'}))
+    ellipsoid = forms.ChoiceField(choices=[('wgs', 'WGS84'),('grs', 'GRS80'), ('clarke', 'Clarke1880'), ('helmert1906', 'Helmert1906') ,('clarke1866','Clarke1866'),('autre' , 'autre')], required=False, widget= forms.Select(attrs={'class':'selectdrop ccst'}))
     grand =  forms.FloatField(required=False, min_value=0, initial=0, widget=forms.NumberInput(attrs={'class':'ccst'}))
     petit = forms.FloatField(required=False, min_value=0, initial=0, widget=forms.NumberInput(attrs={'class':'ccst'}))
     latitude = LatitudeField()

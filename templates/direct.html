@@ -1,5 +1,6 @@
 {% extends 'plotbase.html' %}
 
+
 {% block head %}
 {{block.super}}
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -14,11 +15,48 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
   <title>Direct</title>
 </head>
+<style>
+  .ccst{
+    width: 200px;
+    height: 30px;
+    border-radius: 5px;
+    background-color:rgb(37, 100, 119) ;
+    color: blanchedalmond;
+    text-align: center;
+  }
+  .ccst2{
+    width: 60px;
+    height: 30px;
+    border-radius: 5px;
+    background-color:rgb(37, 100, 119) ;
+    color: blanchedalmond;
+    text-align: center;
+  }
+  .ccst1{
+    background-color: burlywood;
+    height: 30px;
+    border-radius: 5px;
+  }
+  body { 
+    margin: 0;
+  }
+  
+  #canvas {
+    position: fixed;
+  }
+  
+  .dg.ac {
+    z-index: 1 !important;
+  }
+  
+</style>
 <body>
   {% if not plot %}
+  <div class="login-box">
+ >
   <form action="" method="post" id="myform">
     {% csrf_token %}
-    <h4>Choississez un ellipoide de référence :</h4>
+    <h4 id="titre1">Choississez un ellipoide de référence :</h4>
     <div>
       {{directform.ellipsoid}}
     </div>
@@ -30,14 +68,32 @@
     <div>
       {{directform.petit}}
     </div>
-    <h4>Coordonnées du point de départ</h4>
-    <h4>Latitude :</h4> <div>{{directform.latitude}}</div>
-    <h4>Longitude :</h4> <div>{{directform.longitude}}</div>
-    <h4>Azimut du départ :</h4> <div>{{directform.azimut}}</div>
-    <h4>La distance géodésique :</h4> <div>{{directform.distance_geodesique}}</div>
-    <input type="submit" name="action" value="Calculer" class="btn btn-primary" id="btn">
-    <button type="submit" name="action" value="Visualiser" class="btn btn-primary">Visualiser </button>
+    <h4 id="titre1" >Coordonnées du point de départ</h4>
+    <h4 id="titre1">Latitude :</h4>  <div class="input1">{{directform.latitude}}</div>
+    <h4 id="titre1">Longitude :</h4> <div class="input1">{{directform.longitude}}</div>
+    <h4 id="titre1">Azimut du départ :</h4> <div class="input1">{{directform.azimut}}</div>
+    <h4 id="titre1">La distance géodésique :</h4> <div class="input1">{{directform.distance_geodesique}}</div>
+    <button type="submit" name="action" value="Calculer" class="glow-on-hover" id="btn">Calculer </button>
+    <button type="submit" name="action" value="Visualiser" class="glow-on-hover">Visualiser </button>
   </form>
+  <article>
+    <figure>
+        <!-- <video src="https://cdn-icons-mp4.flaticon.com/512/6416/6416399.mp4"></video> -->
+        <!-- <img src="http://www.myspace.com/earthharmonics/giphy.gif" alt=""> -->
+        <iframe src="https://giphy.com/embed/WlBUAWG03Zic8"  class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/earth-WlBUAWG03Zic8"></a></p>
+    </figure>
+
+    <div>
+      <h4>Problème Direct</h4>
+        <p>
+          Étant donné les coordonnées géographiques du point de départ, une distance géodésique et un azimut géodésique de départ,En utilisant <strong>la formule directe de Vincenty</strong>  pour calculer les coordonnées d'un deuxième point ainsi que l'azimut géodésique inverse.
+        </p>
+        <h1>
+            Geohub
+        </h1>
+    </div>
+</article>
+</div> 
   <div>
     <h2>Les coordonnées du point d'arrivé :</h2>
     <h4>Latitude :</h4>
@@ -53,7 +109,7 @@
       <h2 class="visualisation">Visualisation</h2>
         {# <div id="plot_container" class="col-md-8 col-md-offset-2">{{plot|safe}}</div>#}
         <div class="">{{plot|safe}}</div>
-        <button id="previous" class="previous">&laquo; Back</button></div>
+        <button id="previous" class="previous glow-on-hover">&laquo; Précédent</button></div>
       </div>
       
   {% endif %}
@@ -64,6 +120,35 @@
         {
            window.history.go(-1);
         }});   
+        const article = document.querySelector('article');
+
+        // to compute the center of the card retrieve its coordinates and dimensions
+        const {
+          x, y, width, height,
+        } = article.getBoundingClientRect();
+        const cx = x + width / 2;
+        const cy = y + height / 2;
+        
+        // following the mousemove event compute the distance betwen the cursor and the center of the card
+        function handleMove(e) {
+          const { pageX, pageY } = e;
+        
+          // ! consider the relative distance in the [-1, 1] range
+          const dx = (cx - pageX) / (width / 2);
+          const dy = (cy - pageY) / (height / 2);
+        
+          // rotate the card around the x axis, according to the vertical distance, and around the y acis, according to the horizontal gap 
+          this.style.transform = `rotateX(${10 * dy * -1}deg) rotateY(${10 * dx}deg)`;
+        }
+        
+        // following the mouseout event reset the transform property
+        function handleOut() {
+          this.style.transform = 'initial';
+        }
+        
+        article.addEventListener('mousemove', handleMove);
+        article.addEventListener('mouseout', handleOut);
+           
   </script>    
   
 {% endblock javascript %}

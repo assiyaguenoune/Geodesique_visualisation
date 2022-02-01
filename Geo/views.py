@@ -7,11 +7,12 @@ from math import *
 from .inverse import Inverse
 from . import visualisation
 from . import point_geodesique
+from .contact import ploty
 # Create your views here.
 def home(request):
      return render(request,'Home.html')
 def contact(request):
-    return render(request,'Contact.html')
+    return render(request,'Contact.html',{'ploty':ploty() })
 def direct(request):
      if request.method=='POST':
           action=request.POST['action']  
