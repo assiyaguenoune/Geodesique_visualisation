@@ -1,6 +1,5 @@
 {% extends 'Base.html' %}
-
-
+{% load static %}
 {% block head %}
  {% endblock %}
   {% block content %}
@@ -17,11 +16,161 @@
 </head>
 <style>
   /* Add a dark background color to the footer */
+  @import url('https://fonts.googleapis.com/css?family=Exo:400,700');
+
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+html,body{
+    font-family: 'Exo', sans-serif;
+    position: relative;
+    background-color:rgb(37, 100, 119);
+    height: 500px;
+}
+
+.context h1{
+    text-align: center;
+    color: #fff;
+    font-size: 50px;
+}
+
+
+.area{
+  background: linear-gradient(to bottom, rgb(37, 100, 119) 0%, rgba(0,0,0,0.6) 100%);
+    background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);  
+    width: 100%;
+    height:500px;
+    position: absolute;
+    top: 0px;
+    
+   
+}
+
+.circles{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.circles li{
+    position: absolute;
+    display: block;
+    list-style: none;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    animation: animate 25s linear infinite;
+    bottom: -150px;
+    
+}
+
+.circles li:nth-child(1){
+    left: 25%;
+    width: 80px;
+    height: 80px;
+    animation-delay: 0s;
+}
+
+
+.circles li:nth-child(2){
+    left: 10%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 2s;
+    animation-duration: 12s;
+}
+
+.circles li:nth-child(3){
+    left: 70%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 4s;
+}
+
+.circles li:nth-child(4){
+    left: 40%;
+    width: 60px;
+    height: 60px;
+    animation-delay: 0s;
+    animation-duration: 18s;
+}
+
+.circles li:nth-child(5){
+    left: 65%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 0s;
+}
+
+.circles li:nth-child(6){
+    left: 75%;
+    width: 110px;
+    height: 110px;
+    animation-delay: 3s;
+}
+
+.circles li:nth-child(7){
+    left: 35%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 7s;
+}
+
+.circles li:nth-child(8){
+    left: 50%;
+    width: 25px;
+    height: 25px;
+    animation-delay: 15s;
+    animation-duration: 45s;
+}
+
+.circles li:nth-child(9){
+    left: 20%;
+    width: 15px;
+    height: 15px;
+    animation-delay: 2s;
+    animation-duration: 35s;
+}
+
+.circles li:nth-child(10){
+    left: 85%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 0s;
+    animation-duration: 11s;
+}
+
+
+
+@keyframes animate {
+
+    0%{
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0;
+    }
+
+    100%{
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+        border-radius: 50%;
+    }
+
+} 
+
   footer {
 
-    background-color: #2d2d30;
+    background-color: #000000;
     color: #f5f5f5;
     padding: 25px;
+    position: absolute;
+    top:600px;
+    width: 100%;
 
   }
   
@@ -43,11 +192,7 @@
     left: 40%;
 
   }
-  html , body{
-    height: 100px;
-    position: relative;
-    background-image: url("https://images.pexels.com/photos/1276429/pexels-photo-1276429.jpeg?cs=srgb&dl=pexels-dids-1276429.jpg&fm=jpg");
-  }
+ 
   .wrap {
     position: absolute;
     height: 100%;
@@ -137,28 +282,39 @@
       opacity: 0;
     }
   }
+
   </style>
  
 <body>
  
-  <nav class="navbar navbar-inverse ">
+  <nav class="navbar navbar-inverse " style="background-color: rgb(37, 100, 119);">
     <div class="container-fluid">
-      <div class="navbar-header" style="background-color: black;">
-        <a class="navbar-brand" href="#"><em>Geodesy</em></a>
+      <div class="navbar-header" style=" height:70px;">
+        <a class="navbar-brand" href="#"><em class="title1">Geodesy</em></a>
       </div>
       <ul class="nav navbar-nav navbar-right">
         <li class="active"><a href="#">Acceuil</a></li>
         <li><a href="#">A propos</a></li>
         <li><a href="Contact">Contact</a></li>
-        <li><a href="visualiser">Visualisation</a></li>
+        <li><a href="##"><img src="{% static 'iav.png' %}" alt="iavlogo" style="width: 80px;height:60px;float:center;"></a></li>
       </ul>
     </div>
   </nav> 
   <article>
-  <!-- particles.js container --> 
-
-
-<!-- particles.js lib - https://github.com/VincentGarreau/particles.js --> 
+<div class="area" >
+          <ul class="circles">
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+          </ul>
+  </div >
 
   <div class="wrap">
     <button type="button" class="button"><a href="Direct" class="button" style="text-decoration: none;">Probléme Directe</a></button>

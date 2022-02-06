@@ -1,7 +1,6 @@
-import datetime
-import glob
-import logging
-import os
+from re import template
+from turtle import bgcolor, color, width
+from matplotlib import colors
 from numpy import *
 from math import radians
 import plotly.graph_objs as go
@@ -35,16 +34,21 @@ def plot3d(a, b, arr):
 
     layout = go.Layout(
         title='Visualisation de la géodésique',
-        autosize=False,
-        width=800,
-        height=800
-        
-        
+        title_font_family="Courier New",
+        title_font_size=36,
+        autosize=True,
+        width=1520,
+        height=680,
+        template='plotly_dark',
+        paper_bgcolor="#000000",
+        title_font_color="#b2ffff"
+           
     )
     fig = go.Figure(go.Surface(
     x = cos(phi)*cos(theta)*a,
     y = cos(phi)*sin(theta)*a,
-    z = b *sin(phi)), layout=layout)
+    z = b *sin(phi),colorscale='Blues'), layout=layout,
+    )
 
     spheroid = a,a/(a-b)
     for i in range(400):
@@ -54,8 +58,15 @@ def plot3d(a, b, arr):
     x=[arr[i].x for i in range(400)],
     y=[arr[i].y for i in range(400)],
     z=[arr[i].z for i in range(400)],
-    mode="lines"
+    mode="lines",
+    line=dict(
+        color="aqua",
+        dash='solid',
+        width=10
+    )
 )
+
+    
     plot_div = plot(fig, output_type='div', include_plotlyjs=False)
     return plot_div
   

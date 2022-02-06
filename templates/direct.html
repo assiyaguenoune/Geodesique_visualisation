@@ -1,6 +1,4 @@
 {% extends 'plotbase.html' %}
-
-
 {% block head %}
 {{block.super}}
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -16,6 +14,22 @@
   <title>Direct</title>
 </head>
 <style>
+  html, body{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+  }
+  form{
+    position: absolute;
+    left: 50px;
+    top:20px;
+  }
   .ccst{
     width: 200px;
     height: 30px;
@@ -32,15 +46,12 @@
     color: blanchedalmond;
     text-align: center;
   }
+  
   .ccst1{
     background-color: burlywood;
     height: 30px;
     border-radius: 5px;
   }
-  body { 
-    margin: 0;
-  }
-  
   #canvas {
     position: fixed;
   }
@@ -53,22 +64,39 @@
     background: linear-gradient(to bottom, rgb(37, 100, 119) 0%, rgba(0,0,0,0.6) 100%);
     transition: opacity 0.1s, transform 0.3s cubic-bezier(0.17, -0.65, 0.665, 1.25);
     transform: scale(1);
-    color: white;
+    color: #b2ffff;
+    font-family: "Courier New";
     top: 55%;
     left: 57%;
+    padding-left: 5px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  #titre1{
+    color: #b2ffff;
+    font-family: "Courier New";
+  }
+  form{
+    height: 700px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background: linear-gradient(to bottom, rgb(37, 100, 119) 0%, rgba(0,0,0,0.6) 100%);
   }
 </style>
 <body>
   {% if not plot %}
   <div class="login-box">
- >
- <div id="particles-js"></div>
-  <form action="" method="post" id="myform">
-    {% csrf_token %}
-    <h4 id="titre1">Choississez un ellipoide de référence :</h4>
-    <div>
-      {{directform.ellipsoid}}
+  <div id="particles-js"></div>
+ <form action="" method="post" id="myform">
+   {% csrf_token %}
+   <h4 id="titre1">Choississez un ellipoide de référence :</h4>
+   <div>
+     {{directform.ellipsoid}}
     </div>
+    <button class="ab" type="button"> ou deéterminez a et b </button>
+  <div class="pp", style="visibility: hidden;">
     <h4> Grand axe (en m)</h4>
     <div>
       {{directform.grand}}
@@ -77,21 +105,22 @@
     <div>
       {{directform.petit}}
     </div>
+  </div>
     <h4 id="titre1" >Coordonnées du point de départ</h4>
     <h4 id="titre1">Latitude :</h4>  <div class="input1">{{directform.latitude}}</div>
     <h4 id="titre1">Longitude :</h4> <div class="input1">{{directform.longitude}}</div>
     <h4 id="titre1">Azimut du départ :</h4> <div class="input1">{{directform.azimut}}</div>
-    <h4 id="titre1">La distance géodésique :</h4> <div class="input1">{{directform.distance_geodesique}}</div>
+    <h4 id="titre1">La distance géodésique :</h4> <div class="input1">{{directform.distance_geodesique}}</div> <br> 
     <button type="submit" name="action" value="Calculer" class="glow-on-hover" id="btn">Calculer </button>
     <button type="submit" name="action" value="Visualiser" class="glow-on-hover">Visualiser </button>
   </form>
   <article>
     <figure>
-        <!-- <video src="https://cdn-icons-mp4.flaticon.com/512/6416/6416399.mp4"></video> -->
-        <!-- <img src="http://www.myspace.com/earthharmonics/giphy.gif" alt=""> -->
-        <iframe src="https://giphy.com/embed/WlBUAWG03Zic8"  class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/earth-WlBUAWG03Zic8"></a></p>
+      <!-- <video src="https://cdn-icons-mp4.flaticon.com/512/6416/6416399.mp4"></video> -->
+      <!-- <img src="http://www.myspace.com/earthharmonics/giphy.gif" alt=""> -->
+      <iframe src="https://giphy.com/embed/WlBUAWG03Zic8"  class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/earth-WlBUAWG03Zic8"></a></p>
     </figure>
-
+    
     <div>
       <h4>Problème Direct</h4>
         <p>
@@ -115,7 +144,6 @@
   {% else %}
   <div id="plot" style="display:block;">
       <div class="row" >
-      <h2 class="visualisation">Visualisation</h2>
         {# <div id="plot_container" class="col-md-8 col-md-offset-2">{{plot|safe}}</div>#}
         <div class="">{{plot|safe}}</div>
         <button id="previous" class="previous glow-on-hover">&laquo; Précédent</button></div>
@@ -157,8 +185,11 @@
         
         article.addEventListener('mousemove', handleMove);
         article.addEventListener('mouseout', handleOut);
-
-        particlesJS("particles-js", {
+      $(document).ready(function(){
+          // Initialize Tooltip
+          $('[data-toggle="tooltip"]').tooltip();
+        });
+      particlesJS("particles-js", {
           "particles": {
             "number": {
               "value": 355,
@@ -267,7 +298,13 @@
             }
           },
           "retina_detect": true
-        });         
+        }); 
+  $(document).ready(function(){
+    $("div.ab").click(function(){
+          $(".pp").css('visibility')='visible';
+    });
+  });
+          
   </script>    
   
 {% endblock javascript %}

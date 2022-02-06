@@ -103,7 +103,8 @@ class parametersField(forms.MultiValueField):
             return data_list
         return [None, None]
 class directform(forms.Form):
-    ellipsoid = forms.ChoiceField(choices=[('wgs', 'WGS84'),('grs', 'GRS80'), ('clarke', 'Clarke1880'), ('helmert1906', 'Helmert1906') ,('clarke1866','Clarke1866'),('autre' , 'autre')], required=False, widget= forms.Select(attrs={'class':'selectdrop ccst' }))
+    ellipse=[('wgs', 'WGS84'),('grs', 'GRS80'), ('clarke', 'Clarke1880'), ('helmert1906', 'Helmert1906') ,('clarke1866','Clarke1866'),('autre' , 'autre')]
+    ellipsoid = forms.ChoiceField(choices=ellipse,initial='clarke', required=False, widget= forms.Select(attrs={'class':'selectdrop ccst one' }))
     grand =  forms.FloatField(required=False, min_value=0, initial=0, widget=forms.NumberInput(attrs={'class':'ccst'}))
     petit = forms.FloatField(required=False, min_value=0, initial=0, widget=forms.NumberInput(attrs={'class':'ccst'}))
     latitude = LatitudeField()
@@ -112,7 +113,7 @@ class directform(forms.Form):
     distance_geodesique = forms.FloatField(min_value=0, initial=0, widget=forms.NumberInput(attrs={'class':'ccst'}))      
     
 class inverseform(forms.Form):
-    ellipsoid = forms.ChoiceField(choices=[('wgs', 'WGS84'),('grs', 'GRS80'), ('clarke', 'Clarke1880'), ('helmert1906', 'Helmert1906') ,('clarke1866','Clarke1866'),('autre' , 'autre')], required=False, widget= forms.Select(attrs={'class':'selectdrop ccst'}))
+    ellipsoid = forms.ChoiceField(choices=[('wgs', 'WGS84'),('grs', 'GRS80'), ('clarke', 'Clarke1880'), ('helmert1906', 'Helmert1906') ,('clarke1866','Clarke1866'),('autre' , 'autre')],initial='clarke', required=False, widget= forms.Select(attrs={'class':'selectdrop ccst one'}))
     grand =  forms.FloatField(required=False, min_value=0, initial=0, widget=forms.NumberInput(attrs={'class':'ccst'}))
     petit = forms.FloatField(required=False, min_value=0, initial=0, widget=forms.NumberInput(attrs={'class':'ccst'}))
     latitude = LatitudeField()

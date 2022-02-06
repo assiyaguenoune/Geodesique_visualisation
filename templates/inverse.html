@@ -15,6 +15,19 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <style>
+  html,body{
+    position: relative;
+  }
+  form {
+    position:absolute;
+    left : 50px;
+    text-align: center;
+    height: 700px;
+    width: 630px;
+    border-radius: 15px;
+    background: linear-gradient(to bottom, rgb(37, 100, 119) 0%, rgba(0,0,0,0.6) 100%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
   .ccst{
     width: 200px;
     height: 30px;
@@ -36,27 +49,47 @@
     height: 30px;
     border-radius: 5px;
   }
+  .resultat{
+    position: absolute;
+    background: linear-gradient(to bottom, rgb(37, 100, 119) 0%, rgba(0,0,0,0.6) 100%);
+    transition: opacity 0.1s, transform 0.3s cubic-bezier(0.17, -0.65, 0.665, 1.25);
+    transform: scale(1);
+    color: #b2ffff;
+    font-family: "Courier New";
+    top: 55%;
+    left: 57%;
+    width: 500px;
+    height: 190px;
+    padding-left: 5px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  #titre1{
+    color: #b2ffff;
+    font-family: "Courier New";
+  }
 </style>
 <body>
   {% if not plot %}
   <form action="" method="post">
     {% csrf_token %}
-  <h3>choisir l'ellipsoide de référence :</h3>
+  <h3  id="titre1">choisir l'ellipsoide de référence :</h3>
   <div >{{form.ellipsoid}}</div>
   <div>
-  <h3>a et b</h3>
+  <h3 id="titre1">a et b</h3>
   <div>{{form.petit}}</div> <br>
   <div>{{form.grand}}</div></div>
-  <h3>Les coordonnées du point de départ :</h3>
+  <h3  id="titre1">Les coordonnées du point de départ :</h3>
   <div>
     <div>{{form.latitude}}</div> <br>
     <div>{{form.longitude}}</div>
   </div>
-  <h3>Les coordonnées du point d'arrivé:</h3>
+  <h3 id="titre1">Les coordonnées du point d'arrivé:</h3>
   <div>
     <div>{{form.latitude0}}</div><br>
     <div>{{form.longitude0}}</div>
-  </div> <br><br> 
+  </div> <br><br> <br> <br>
   <button type="submit" name="action" value="Calculer" class="glow-on-hover" id="btn">Calculer </button>
     <button type="submit" name="action" value="Visualiser" class="glow-on-hover">Visualiser </button>
 </form>
@@ -77,20 +110,19 @@
       </h1>
   </div>
 </article>
-  <div>
+  <div class="resultat">
     <h4>L'azimut de départ :</h4>
-    <div>{{az1}}</div>
+    <span style="color: aliceblue;">{{az1}}</span> <br>
     <h4>L'azimut inverse :</h4>
-    <div>{{az2}}</div>
+    <span style="color: aliceblue;">{{az2}}</span> <br>
     <h4> La distance (en m) :</h4>
-    <div>{{distance}}</div>
+    <span style="color: aliceblue;">{{distance}}</span>
   </div>
   {% else %}
   <div id="plot" style="display:block;">
     <div class="row" >
-    <h2 class="visualisation">Visualisation</h2>
       <div class="">{{plot|safe}}</div>
-      <button id="previous" class="previous">&laquo; Back</button></div>
+      <button id="previous" class="previous glow-on-hover">&laquo; Précédent</button></div>
     </div>
 {% endif %}
 {% block javascript %}
