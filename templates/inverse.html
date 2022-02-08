@@ -17,10 +17,12 @@
 <style>
   html,body{
     position: relative;
+    background-color: black;
   }
   form {
     position:absolute;
     left : 50px;
+    top: 25px;
     text-align: center;
     height: 700px;
     width: 630px;
@@ -56,7 +58,6 @@
     transform: scale(1);
     color: #b2ffff;
     font-family: "Courier New";
-    top: 55%;
     left: 57%;
     width: 500px;
     height: 190px;
@@ -69,6 +70,7 @@
     color: #b2ffff;
     font-family: "Courier New";
   }
+  
 </style>
 <body>
   {% if not plot %}
@@ -110,7 +112,7 @@
       </h1>
   </div>
 </article>
-  <div class="resultat">
+  <div class="resultat" style="position:absolute; top:410px;">
     <h4>L'azimut de départ :</h4>
     <span style="color: aliceblue;">{{az1}}</span> <br>
     <h4>L'azimut inverse :</h4>

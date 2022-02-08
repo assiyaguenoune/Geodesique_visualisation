@@ -65,8 +65,6 @@ def plot3d(a, b, arr):
         width=10
     )
 )
-
-    
     plot_div = plot(fig, output_type='div', include_plotlyjs=False)
     return plot_div
   

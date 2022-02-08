@@ -1,5 +1,6 @@
 from math import pi
-from django.shortcuts import render
+from django.shortcuts import render , redirect
+from django.contrib import messages
 from .direct import Direct
 from .forms import directform 
 from .forms import inverseform
@@ -22,21 +23,23 @@ def direct(request):
                if form.is_valid():
                     latitude=form.cleaned_data.get("latitude")
                     latitude=latitude*pi/180
+                    if latitude>90.00:
+                        return redirect('Direct')
+                    
                     longitude=form.cleaned_data.get("longitude")
                     longitude=longitude*pi/180
                     ellipsoid=form.cleaned_data.get("ellipsoid")
                     a=form.cleaned_data.get("grand")
                     b=form.cleaned_data.get("petit")
-                    if a==0 or b==0:
-                         if ellipsoid=="wgs":
+                    if ellipsoid=="wgs":
                              a,b = 6378137,6356752.3142
-                         elif ellipsoid == "grs":
+                    elif ellipsoid == "grs":
                               a,b = 6378137,6356752.3141
-                         elif ellipsoid == "clarke":
+                    elif ellipsoid == "clarke":
                               a,b =6378249.145,6356514.870
-                         elif ellipsoid=="helmert1906":
+                    elif ellipsoid=="helmert1906":
                               a,b=6378200,6356818.169627891
-                         elif ellipsoid=="clarke1866":
+                    elif ellipsoid=="clarke1866":
                               a,b=6378206.4,6356583.799998981
                     azimut=form.cleaned_data.get("azimut")
                     azimut=azimut*pi/180
